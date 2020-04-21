@@ -5,7 +5,7 @@
 #include "sound.h"
 
 int main(void){
-	Position cur = getscreensize();	// get screensize
+/*	Position cur = getscreensize();	// get screensize
 	char postdata[100];
 	sprintf(postdata, "row=%d&col=%d&id=e1900305",cur.row,cur.col);
 	sendpost(URL, postdata);
@@ -95,16 +95,18 @@ int main(void){
 	drawbar(30,30);
 	drawbar(50,30);
 
-*/
+
 	getchar();	//after drawing bars,wait for a key
 	resetcolors();
 	clearscreen();
 	printf("this text is displayed in default color \n");
-	getchar();
+	getchar();*/
 	FILE *fp= fopen("test.wav", "r");	//open the wav file in read-only
 	WAVheader h =readwavhdr(fp);
 	displaywavhdr(h);
+	clearscreen();
 	wavdata(h,fp); // to calculate db value and display them as a barchart
 	fclose(fp);
+	getchar();
 }
 

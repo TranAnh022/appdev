@@ -1,6 +1,7 @@
 // This header file contains constant definitions and functions declarations
 // for processing sound, specifically .wav files.
-
+//#define SDEBUG
+// define soud structure (deal with .wav file)
 typedef struct{
 	char chunkID[4];		// should be always"RIFF"
 	int chunkSize;			// indicates how big sound data is
@@ -19,5 +20,6 @@ typedef struct{
 
 
 // function declarations
-WAVheader readwavhdr(FILE *);
-void displaywavhdr(WAVheader);
+WAVheader readwavhdr(FILE *fp);
+void displaywavhdr(WAVheader h);
+void wavdata(WAVheader h,FILE *fp);
