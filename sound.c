@@ -2,6 +2,7 @@
 #include "sound.h"
 #include <math.h>
 #include "screen.h"
+#include "comm.h"
 // function definitions
 WAVheader readwavhdr(FILE *fp){
 	WAVheader myh;
@@ -30,7 +31,8 @@ void wavdata(WAVheader h, FILE *fp){
 	// (RMS) formula. We will display a 5-sec recorded sound into bar chart
 	// our sound file users samples rateof 16000,for 5 seconds, there are
 	// 5*16000= 80000 samples, we want to display them into 160 bars
-	int peak=0, flag=0;
+	int peaks=0, flag=0;
+	double max = 0.0;
 	short samples[500];		// to read 500 samples from wav file
 	for(int i=0; i<160;i++){
 		fread(samples, sizeof(samples),1,fp);
@@ -48,7 +50,7 @@ void wavdata(WAVheader h, FILE *fp){
 			setfgcolor(RED);
 			if(flag==0){
 				flag=1;
-				peak++;
+				peaks++;
 			}
 		}
 		else{
@@ -59,11 +61,16 @@ void wavdata(WAVheader h, FILE *fp){
 		//drawbar(i+1,(int) 20*log10(re)/3));
 
 #endif
-	}
+	if(20*log10(re)>max){
+		max = 20*log10(re);
+}
+}
 	// display sampel rate, duration no
 	gotoXY(1,1); printf("Sample Rate: %d\n",h.sampleRate);
 	gotoXY(1,75);printf("Duration: %f s\n",(float)h.subchunk2Size/h.byteRate);
-	gotoXY(1,150); printf("Peaks: %d\n",peak);
-
+	gotoXY(1,150); printf("Peaks: %d\n",peaks);
+	char postdata[100];
+	sprintf(postdata, "peaks=%d&max=%f\n",peaks,max);
+	sendpost(URL, postdata);
 
 }
